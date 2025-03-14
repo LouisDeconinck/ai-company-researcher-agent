@@ -1,0 +1,12 @@
+{
+	"actorSpecification": 1,
+	"name": "ai-company-researcher-agent",
+	"title": "AI Company Researcher Agent",
+	"description": "AI agent that generates an extensive research report on a company.",
+	"version": "0.0",
+	"buildTag": "latest",
+	"meta": {
+		"templateId": "python-empty"
+	},
+	"dockerfile": "./Dockerfile"
+}

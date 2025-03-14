@@ -1,0 +1,16 @@
+{
+    "title": "AI Company Researcher Agent Input",
+    "description": "Configure the company name to research.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "company_name": {
+            "title": "Company Name",
+            "description": "Company name or other identifier such as a website or general description.",
+            "type": "string",
+            "editor": "textfield",
+            "prefill": "Apify"
+        }
+    },
+    "required": ["company_name"]
+}
