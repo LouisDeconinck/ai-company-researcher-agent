@@ -14,7 +14,7 @@ load_dotenv()
 apify_api_key = os.getenv("APIFY_API_KEY")
 client = ApifyClient(apify_api_key)
 
-model = GeminiModel('gemini-2.0-flash', provider='google-gla', api_key=gemini_api_key)
+model = GeminiModel('gemini-2.0-flash', provider='google-gla')
 research_agent = Agent(
     model,
     result_type=CompanyInfo,
