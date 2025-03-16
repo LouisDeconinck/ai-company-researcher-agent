@@ -104,3 +104,7 @@ The Actor uses a multi-stage process:
 1. **Research Phase**: An AI agent researches comprehensive company information using web searches
 2. **Data Collection Phase**: Targeted data collection from external APIs (LinkedIn, Trustpilot, etc.)
 3. **Report Generation Phase**: A second AI agent analyzes collected data and generates a tailored business report
+
+## License
+
+This project is licensed under the MIT License.
