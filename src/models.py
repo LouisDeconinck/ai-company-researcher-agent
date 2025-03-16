@@ -163,3 +163,18 @@ class CompanyInfo(BaseModel):
     trustpilot_data: List[TrustpilotReview] = Field(default_factory=list, description="Reviews retrieved from Trustpilot")
     similarweb_data: SimilarwebData = Field(default_factory=SimilarwebData, description="Analytics data retrieved from Similarweb")
     google_maps_data: List[GoogleMapsPlace] = Field(default_factory=list, description="Location data retrieved from Google Maps")
+
+class BasicCompanyInfo(BaseModel):
+    """Basic company information model without external API data fields.
+    This is used as the output type for the research agent."""
+    company_name: str = Field(..., description="Official name of the company")
+    website_url: str = Field(..., description="URL of the company's official website")
+    short_description: str = Field(..., description="Brief overview of the company's business and mission")
+    key_employees: List[Employee] = Field(default_factory=list, description="List of key company leaders and their positions", max_length=5)
+    competitors: List[str] = Field(default_factory=list, description="Names of major competing companies in the same industry", max_length=5)
+    latest_news: List[NewsItem] = Field(default_factory=list, description="Recent news articles or press releases about the company", max_length=5)
+    linkedin_url: str = Field(..., description="URL of the company's LinkedIn profile")
+    twitter_url: str = Field(..., description="URL of the company's Twitter profile")
+    facebook_url: str = Field(..., description="URL of the company's Facebook profile")
+    instagram_url: str = Field(..., description="URL of the company's Instagram profile")
+    youtube_url: str = Field(..., description="URL of the company's YouTube channel")
