@@ -1,4 +1,14 @@
-# Feel free to add your Python dependencies below. For formatting guidelines, see:
-# https://pip.pypa.io/en/latest/reference/requirements-file-format/
+# Python dependencies for AI Company Researcher Agent
+# For formatting guidelines, see: https://pip.pypa.io/en/latest/reference/requirements-file-format/
 
+# Core dependencies
 apify < 3.0
+apify-client
+python-dotenv
+pydantic >= 2.0
+pydantic-ai
+
+# Additional libraries
+aiohttp
+crawlee
+asyncio

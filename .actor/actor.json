@@ -8,5 +8,29 @@
 	"meta": {
 		"templateId": "python-empty"
 	},
-	"dockerfile": "./Dockerfile"
+	"dockerfile": "./Dockerfile",
+	"storages": {
+		"dataset": {
+			"actorSpecification": 1,
+			"views": {
+				"overview": {
+					"title": "Overview",
+					"transformation": {
+						"fields": [
+							"report"
+						]
+					},
+					"display": {
+						"component": "table",
+						"properties": {
+							"Report": {
+								"field": "report",
+								"format": "text"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

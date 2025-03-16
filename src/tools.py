@@ -71,6 +71,7 @@ async def search_google(ctx: RunContext[Deps], query: str, max_results: int = 1)
         Actor.log.warning(f"Failed to store search results: {str(e)}")
             
     Actor.log.info(f"Found {len(results)}/{max_results} search results for: {query}")
+    await Actor.charge('tool_result', len(results))
     return results 
 
 async def get_linkedin_company_profile(
@@ -125,6 +126,7 @@ async def get_linkedin_company_profile(
                 specialties=[s["value"] for s in item.get("specialties", [])],
                 address=address
             )
+        await Actor.charge('tool_result', 1)
         return LinkedInData()
 
     except Exception as e:
@@ -178,8 +180,6 @@ async def search_google_maps(
                             publishedAtDate=review.get("publishedAtDate"),
                             stars=review.get("stars")
                         ))
-                # Limit to 5 reviews
-                reviews = reviews[:5]
             
             # Create a GoogleMapsPlace model instance
             place = GoogleMapsPlace(
@@ -200,6 +200,7 @@ async def search_google_maps(
             )
             results.append(place)
 
+        await Actor.charge('tool_result', len(results))
         return results
 
     except Exception as e:
@@ -259,6 +260,7 @@ async def get_trustpilot_reviews(
                     likes=item.get("likes", 0)
                 )
                 reviews.append(review)
+            await Actor.charge('tool_result', len(reviews))
             return reviews
         else:
             Actor.log.warning(f"No Trustpilot reviews retrieved for {domain}")
@@ -434,6 +436,8 @@ async def get_similarweb_results(
                         interested_websites.append(str(w.get("domain", "")))
                     elif isinstance(w, str):
                         interested_websites.append(w)
+            
+            await Actor.charge('tool_result', 1)
             
             # Create and return a SimilarwebData model instance
             return SimilarwebData(

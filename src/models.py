@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 from dataclasses import dataclass
 from apify_client import ApifyClient
@@ -146,35 +146,92 @@ class SimilarwebData(BaseModel):
     address: Optional[str] = Field(None, description="Company address")
 
 class CompanyInfo(BaseModel):
+    # Core company information
     company_name: str = Field(..., description="Official name of the company")
     website_url: str = Field(..., description="URL of the company's official website")
     short_description: str = Field(..., description="Brief overview of the company's business and mission")
-    key_employees: List[Employee] = Field(default_factory=list, description="List of key company leaders and their positions", max_length=5)
-    competitors: List[str] = Field(default_factory=list, description="Names of major competing companies in the same industry", max_length=5)
-    latest_news: List[NewsItem] = Field(default_factory=list, description="Recent news articles or press releases about the company", max_length=5)
-    linkedin_url: str = Field(..., description="URL of the company's LinkedIn profile")
-    twitter_url: str = Field(..., description="URL of the company's Twitter profile")
-    facebook_url: str = Field(..., description="URL of the company's Facebook profile")
-    instagram_url: str = Field(..., description="URL of the company's Instagram profile")
-    youtube_url: str = Field(..., description="URL of the company's YouTube channel")
+    
+    # Business details
+    industry: str = Field(..., description="Industry or sector the company operates in")
+    business_model: str = Field(..., description="Description of how the company generates revenue")
+    target_market: str = Field(..., description="Description of the company's target audience or customer base")
+    products_services: List[str] = Field(default_factory=list, description="Main products or services offered by the company")
+    
+    # Financial information
+    founding_year: int = Field(..., description="Year the company was founded")
+    funding_information: str = Field(..., description="Details about funding rounds, investors, or financial status")
+    estimated_revenue: str = Field(..., description="Estimated annual revenue range or specific figures if available")
+    
+    # People and organization
+    key_employees: List[Employee] = Field(default_factory=list, description="List of key company leaders and their positions")
+    employee_count: str = Field(..., description="Approximate number of employees at the company")
+    
+    # Competitive landscape
+    competitors: List[str] = Field(default_factory=list, description="Names of major competing companies in the same industry")
+    market_position: str = Field(..., description="Description of the company's position in its market")
+    
+    # Social media URLs
+    linkedin_url: str = Field("", description="URL of the company's LinkedIn profile")
+    twitter_url: str = Field("", description="URL of the company's Twitter profile")
+    facebook_url: str = Field("", description="URL of the company's Facebook profile")
+    instagram_url: str = Field("", description="URL of the company's Instagram profile")
+    youtube_url: str = Field("", description="URL of the company's YouTube channel")
+    github_url: str = Field("", description="URL of the company's GitHub profile")
+    discord_url: str = Field("", description="URL of the company's Discord server")
+    
+    # News and updates
+    latest_news: List[NewsItem] = Field(default_factory=list, description="Recent news articles or press releases about the company")
     
     # Additional data fields from external sources with specific models
     linkedin_data: LinkedInData = Field(default_factory=LinkedInData, description="Data retrieved from LinkedIn company profile")
     trustpilot_data: List[TrustpilotReview] = Field(default_factory=list, description="Reviews retrieved from Trustpilot")
     similarweb_data: SimilarwebData = Field(default_factory=SimilarwebData, description="Analytics data retrieved from Similarweb")
     google_maps_data: List[GoogleMapsPlace] = Field(default_factory=list, description="Location data retrieved from Google Maps")
+    
+    # Additional flexible data
+    extra_data: str = Field(..., description="Additional relevant data that doesn't fit into predefined categories")
+    
+    # Business report field
+    report: Optional[str] = Field(None, description="Comprehensive business report in markdown format")
 
 class BasicCompanyInfo(BaseModel):
     """Basic company information model without external API data fields.
     This is used as the output type for the research agent."""
+    # Core company information
     company_name: str = Field(..., description="Official name of the company")
     website_url: str = Field(..., description="URL of the company's official website")
     short_description: str = Field(..., description="Brief overview of the company's business and mission")
-    key_employees: List[Employee] = Field(default_factory=list, description="List of key company leaders and their positions", max_length=5)
-    competitors: List[str] = Field(default_factory=list, description="Names of major competing companies in the same industry", max_length=5)
-    latest_news: List[NewsItem] = Field(default_factory=list, description="Recent news articles or press releases about the company", max_length=5)
-    linkedin_url: str = Field(..., description="URL of the company's LinkedIn profile")
-    twitter_url: str = Field(..., description="URL of the company's Twitter profile")
-    facebook_url: str = Field(..., description="URL of the company's Facebook profile")
-    instagram_url: str = Field(..., description="URL of the company's Instagram profile")
-    youtube_url: str = Field(..., description="URL of the company's YouTube channel")
+    
+    # Business details
+    industry: str = Field(..., description="Industry or sector the company operates in")
+    business_model: str = Field(..., description="Description of how the company generates revenue")
+    target_market: str = Field(..., description="Description of the company's target audience or customer base")
+    products_services: List[str] = Field(default_factory=list, description="Main products or services offered by the company")
+    
+    # Financial information
+    founding_year: int = Field(..., description="Year the company was founded")
+    funding_information: str = Field(..., description="Details about funding rounds, investors, or financial status")
+    estimated_revenue: str = Field(..., description="Estimated annual revenue range or specific figures if available")
+    
+    # People and organization
+    key_employees: List[Employee] = Field(default_factory=list, description="List of key company leaders and their positions")
+    employee_count: str = Field(..., description="Approximate number of employees at the company")
+    
+    # Competitive landscape
+    competitors: List[str] = Field(default_factory=list, description="Names of major competing companies in the same industry")
+    market_position: str = Field(..., description="Description of the company's position in its market")
+    
+    # Social media URLs
+    linkedin_url: str = Field("", description="URL of the company's LinkedIn profile")
+    twitter_url: str = Field("", description="URL of the company's Twitter profile")
+    facebook_url: str = Field("", description="URL of the company's Facebook profile")
+    instagram_url: str = Field("", description="URL of the company's Instagram profile")
+    youtube_url: str = Field("", description="URL of the company's YouTube channel")
+    github_url: str = Field("", description="URL of the company's GitHub profile")
+    discord_url: str = Field("", description="URL of the company's Discord server")
+    
+    # News and updates
+    latest_news: List[NewsItem] = Field(default_factory=list, description="Recent news articles or press releases about the company")
+    
+    # Additional flexible data
+    extra_data: str = Field(..., description="Additional relevant data that doesn't fit into predefined categories")

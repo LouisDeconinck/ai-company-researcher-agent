@@ -1,66 +1,106 @@
-## Python empty template
+This Apify Actor is an AI-powered agent that performs comprehensive company research and generates detailed business reports. It leverages the Gemini 2.0 Flash model to research companies, collect data from multiple sources, and produce an in-depth business analysis report. The agent offers flexibility in both data collection and reporting, adapting its output to the available information.
 
-Start a new [web scraping](https://apify.com/web-scraping) project quickly and easily in Python with our empty project template. It provides a basic structure for the [Actor](https://apify.com/actors) with [Apify SDK](https://docs.apify.com/sdk/python/) and allows you to easily add your own functionality.
+## Features
 
-## Included features
+- **Adaptive Company Research**: Uses AI to find and collate company information based on what's available
+- **Multi-source Data Collection**: Gathers data from LinkedIn, Trustpilot, Similarweb, and Google Maps
+- **Flexible Business Reports**: Generates tailored markdown reports that adapt to the available data
+- **Comprehensive Analysis**: Applies relevant business frameworks based on the company and available information
+- **Structured Data Output**: All collected data is available in structured JSON format
 
-- **[Apify SDK](https://docs.apify.com/sdk/python/)** for Python - a toolkit for building Apify [Actors](https://apify.com/actors) and scrapers in Python
-- **[Input schema](https://docs.apify.com/platform/actors/development/input-schema)** - define and easily validate a schema for your Actor's input
-- **[Request queue](https://docs.apify.com/sdk/python/docs/concepts/storages#working-with-request-queues)** - queues into which you can put the URLs you want to scrape
-- **[Dataset](https://docs.apify.com/sdk/python/docs/concepts/storages#working-with-datasets)** - store structured data where each object stored has the same attributes
+## Business Analysis Approaches
 
-## How it works
+The report generation is adaptable and may include analysis frameworks such as:
 
-Insert your own code to `async with Actor:` block. You can use the [Apify SDK](https://docs.apify.com/sdk/python/) with any other Python library.
+1. **SWOT Analysis** (Strengths, Weaknesses, Opportunities, Threats)
+2. **PESTLE Analysis** (Political, Economic, Social, Technological, Legal, Environmental factors)
+3. **Porter's Five Forces** (Competitive Rivalry, Supplier Power, Buyer Power, Threat of Substitution, Threat of New Entry)
+4. **Business Model Canvas Elements** (Value Propositions, Customer Segments, Key Resources, etc.)
+5. **Competitor Analysis**
+6. **Market Positioning**
+7. **Digital Presence Evaluation** (based on social media profiles and web analytics)
+8. **Customer Sentiment Analysis** (based on reviews if available)
 
-## Resources
+The agent tailors its analysis to the available data and the specific company context, selecting the most relevant frameworks rather than forcing information into a rigid structure.
 
-- [Python tutorials in Academy](https://docs.apify.com/academy/python)
-- [Video guide on getting data using Apify API](https://www.youtube.com/watch?v=ViYYDHSBAKM)
-- [Integration with Make, GitHub, Zapier, Google Drive, and other apps](https://apify.com/integrations)
-- A short guide on how to build web scrapers using code templates:
+## Input
 
-[web scraper template](https://www.youtube.com/watch?v=u-i-Korzf8w)
+The Actor accepts a single input parameter:
 
-
-## Getting started
-
-For complete information [see this article](https://docs.apify.com/platform/actors/development#build-actor-locally). To run the actor use the following command:
-
-```bash
-apify run
+```json
+{
+  "company_name": "Apify"
+}
 ```
 
-## Deploy to Apify
+| Field | Type | Description |
+|-------|------|-------------|
+| `company_name` | String | Name of the company to research |
 
-### Connect Git repository to Apify
+## Output
 
-If you've created a Git repository for the project, you can easily connect to Apify:
+The Actor produces two main outputs:
 
-1. Go to [Actor creation page](https://console.apify.com/actors/new)
-2. Click on **Link Git Repository** button
+1. **Business Report**: A comprehensive markdown file stored in the Key-Value store with the key `report`
+2. **Structured Data**: A JSON output in the default dataset containing all collected company information
 
-### Push project on your local machine to Apify
+### Example Output Structure
 
-You can also deploy the project on your local machine to Apify without the need for the Git repository.
+```json
+{
+  "company_name": "Apify",
+  "website_url": "https://apify.com",
+  "short_description": "...",
+  "industry": "...",
+  "business_model": "...",
+  "target_market": "...",
+  "products_services": [...],
+  "founding_year": 2015,
+  "funding_information": "...",
+  "estimated_revenue": "...",
+  "key_employees": [...],
+  "employee_count": "...",
+  "headquarters_location": "...",
+  "competitors": [...],
+  "market_position": "...",
+  "social_media": {
+    "linkedin": "https://www.linkedin.com/company/apify/",
+    "twitter": "https://twitter.com/apify",
+    "...": "..."
+  },
+  "latest_news": [...],
+  "linkedin_data": {...},
+  "trustpilot_data": [...],
+  "similarweb_data": {...},
+  "google_maps_data": [...],
+  "extra_data": {...},
+  "report": "# Comprehensive Business Report for Apify\n\n## Executive Summary\n..."
+}
+```
 
-1. Log in to Apify. You will need to provide your [Apify API Token](https://console.apify.com/account/integrations) to complete this action.
+## Data Sources
 
-    ```bash
-    apify login
-    ```
+The Actor collects information from the following data sources:
 
-2. Deploy your Actor. This command will deploy and build the Actor on the Apify Platform. You can find your newly created Actor under [Actors -> My Actors](https://console.apify.com/actors?tab=my).
+- **Google Search**: For basic company information
+- **LinkedIn**: Company profile, employee count, specialties, industry
+- **Trustpilot**: Customer reviews and ratings
+- **Similarweb**: Website analytics, traffic sources, demographics
+- **Google Maps**: Physical locations, customer reviews
 
-    ```bash
-    apify push
-    ```
+## Implementation
 
-## Documentation reference
+The Actor is built using:
 
-To learn more about Apify and Actors, take a look at the following resources:
+- **Python**: Core programming language
+- **Apify SDK**: For Actor lifecycle management
+- **Pydantic-AI**: For structured LLM agents and function calling
+- **Gemini 2.0 Flash**: Google's LLM for AI-powered research and analysis
 
-- [Apify SDK for JavaScript documentation](https://docs.apify.com/sdk/js)
-- [Apify SDK for Python documentation](https://docs.apify.com/sdk/python)
-- [Apify Platform documentation](https://docs.apify.com/platform)
-- [Join our developer community on Discord](https://discord.com/invite/jyEM2PRvMU)
+### Architecture
+
+The Actor uses a multi-stage process:
+
+1. **Research Phase**: An AI agent researches comprehensive company information using web searches
+2. **Data Collection Phase**: Targeted data collection from external APIs (LinkedIn, Trustpilot, etc.)
+3. **Report Generation Phase**: A second AI agent analyzes collected data and generates a tailored business report
