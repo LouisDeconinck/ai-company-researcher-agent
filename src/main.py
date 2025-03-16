@@ -1,13 +1,14 @@
 from apify import Actor
 from apify_client import ApifyClient
 import os
+import math
 import asyncio
 import json
 from dotenv import load_dotenv
 from pydantic_ai import Agent, Tool
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.gemini import GeminiModel
-from typing import List, Dict, Any
+from typing import Dict, Any
 from .models import CompanyInfo, BasicCompanyInfo, Deps
 from .prompts import RESEARCH_AGENT_SYSTEM_PROMPT, BUSINESS_REPORT_AGENT_SYSTEM_PROMPT
 from .tools import search_google, get_linkedin_company_profile, search_google_maps, get_trustpilot_reviews, get_similarweb_results
@@ -72,24 +73,7 @@ async def main() -> None:
         result = await research_agent.run(f'Research the company "{company_name}" and provide all required information', deps=Deps(client=client))
         
         usage = result.usage()
-        if usage and usage.total_tokens > 0:
-            await Actor.charge(event_name='llm-tokens', count=usage.total_tokens)
-
-        # Convert social_media from string to dict if needed
-        social_media = {}
-        if result.data.social_media and isinstance(result.data.social_media, str):
-            try:
-                social_media = json.loads(result.data.social_media)
-            except json.JSONDecodeError:
-                social_media = {"social_media_raw": result.data.social_media}
-        
-        # Convert extra_data from string to dict if needed
-        extra_data = {}
-        if result.data.extra_data and isinstance(result.data.extra_data, str):
-            try:
-                extra_data = json.loads(result.data.extra_data)
-            except json.JSONDecodeError:
-                extra_data = {"extra_data_raw": result.data.extra_data}
+        await Actor.charge(event_name='1k-llm-tokens', count=math.ceil(usage.total_tokens / 1000))
 
         # Create a CompanyInfo object from the BasicCompanyInfo result
         company_info = CompanyInfo(
@@ -107,10 +91,8 @@ async def main() -> None:
             estimated_revenue=result.data.estimated_revenue,
             key_employees=result.data.key_employees,
             employee_count=result.data.employee_count,
-            headquarters_location=result.data.headquarters_location,
             competitors=result.data.competitors,
             market_position=result.data.market_position,
-            social_media=result.data.social_media,
             
             # Traditional fields
             linkedin_url=result.data.linkedin_url,
@@ -182,8 +164,7 @@ async def main() -> None:
         report_result = await business_report_agent.run(report_prompt)
         
         usage = report_result.usage()
-        if usage and usage.total_tokens > 0:
-            await Actor.charge(event_name='llm-tokens', count=usage.total_tokens)
+        await Actor.charge(event_name='1k-llm-tokens', count=math.ceil(usage.total_tokens / 1000))
         
         # Extract the report content safely
         if isinstance(report_result.data, str):
